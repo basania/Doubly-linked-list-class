@@ -109,6 +109,11 @@ public:
 			return old;
 		}
 
+		bool operator!= (iterator& rhs) const
+		{
+			return !(*this == rhs);
+		}
+
 	protected:
 		iterator(List& lst, Node* p)
 			: const_iterator(lst, p)
