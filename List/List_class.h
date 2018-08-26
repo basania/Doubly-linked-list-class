@@ -44,6 +44,12 @@ public:
 			return *this;
 		}
 
+		const_iterator& operator-- ()
+		{
+			current = current->prev;
+			return *this;
+		}
+
 		const_iterator& operator++ (int)
 		{
 			const_iterator old = *this;
@@ -109,6 +115,11 @@ public:
 			return old;
 		}
 
+		iterator& operator- (iterator& rhs)
+		{
+			return *this - *rhs;
+		}
+
 		bool operator!= (iterator& rhs) const
 		{
 			return !(*this == rhs);
@@ -165,6 +176,33 @@ public:
 		std::swap(tail, rhs.tail);
 
 		return *this;
+	}
+
+	bool operator== (const List<Object>& rhs) const 
+	{
+		return head == rhs.head;
+	}
+
+	void splice(iterator position, List<Object>& lst)
+	{
+		if (*this == lst)
+		{
+			std::cout << "Lists must be different\n";
+		}
+		else
+		{
+			Node* p = position.current;
+			const_iterator it1 = lst.begin();
+			Node* p1 = it1.current;
+
+			p->prev->next = p1;
+			p1->prev = p->prev;
+
+			const_iterator it2 = --lst.end();
+			Node* p2 = it2.current;
+			p2->next = p;
+			p->prev = p2;
+		}
 	}
 
 	iterator swap_adj(iterator it1, iterator it2)
@@ -332,11 +370,8 @@ private:
 	{
 		itr.assert_is_valid();
 		if (itr.theList != this)
-			throw std::out_of_range{ "The iterator doesn't point to current list" };
+			throw std::out_of_range{ "The iterator doesn't point to the current list" };
 	}
-
-
-
 };
 
 
